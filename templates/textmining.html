@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Arbominer - Ferramenta de Mineração de Texto</title>
+    <!-- Bootstrap core CSS -->
+    <!-- CDN links -->
+    <link rel="stylesheet" type="text/css" href="../static/plugins/jquery.amsify.suggestags-master/css/amsify.suggestags.css">
+    <!-- Amsify Plugin -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../static/plugins/jquery.amsify.suggestags-master/css/amsify.suggestags.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+    <div class="col-lg-12 text-center">
+        <h1 class="mt-5">Ferramenta de Mineração de Texto</h1>
+        <p class="lead">Pesquisa clínica, epidemiologica e genética </p>
+        <div class="container mt-6">
+                <div class="row">
+                {% csrf_token %}
+                    <div class="col-lg-4 form-group">
+                        <label for="virus">Selecione um Arbovírus</label>
+                        <select class="form-control" id="virus">
+                            <option value="dengue">Dengue</option>
+                            <option value="dengue1">Dengue Tipo 1</option>
+                            <option value="dengue2">Dengue Tipo 2</option>
+                            <option value="dengue3">Dengue Tipo 3</option>
+                            <option value="dengue4">Dengue Tipo 4</option>
+                            <option value="zika">Zika</option>
+                            <option value="chikungunya">Chikungunya</option>
+                            <!-- <option value="4">Todos</option> -->
+                        </select>
+                    </div>
+                    <div class="col-lg-4 form-group">
+                        <label for="analise">Tipo de Análise</label>
+                        <select class="form-control" id="analise">
+                            <option value="1">Análise Estatística</option>
+                            <option value="2">Análise Semântica</option>
+                            
+                        </select>
+                    </div>
+                    <div class="col-lg-4 form-group">
+                        <label for="search-tag">Informe a(s) palavra(s) chave</label>
+                        <input id="search-tag" type="text" class="form-control" name="toAjax" placeholder = "Tecle enter para cada tag" value="fever, age"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <label for="bPesquisa"></label>
+                        <button id="bPesquisa" type="button" class="btn btn-primary col-lg-12">Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+            <center>
+                <div class="loader" style="display: none;"></div>
+            </center>
+            <h2 style="display: none;">Tabela de resultados</h2>
+            <!-- <p>Aqui constará os artigos encontrados com as palavras chaves informadas</p>  
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            <br> -->
+            <table id="tableDataTable" class="table table-striped table-bordered" style="width:100%;">
+            
+            </table>
+            
+            <!-- <p>Note that we start the search in tbody, to prevent filtering the table headers.</p> -->
+        </div>
+    </div>
+    </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../static/plugins/jquery.amsify.suggestags-master/js/jquery.amsify.suggestags.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <!-- <script src=""></script> -->
+    <script src="../static/function.js"></script>
+    <script>
+        $(document).ready(function(){
+            // $('#tableDataTable_wrapper').hide();
+            $('h2').hide();
+            let myTable = $('#tableDataTable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "data": [],
+                "columns": [{
+                        "title": "Arbovírus",
+                        "data": "typeVirus"
+                    }, {
+                        "title": "Nome do Arquivo",
+                        "data": "pathToFile", render: function (pathToFile) { return '<a target="_black" href="' + pathToFile.uri + '" open >'+ pathToFile.fileName +'</a>'; }
+                    }, {
+                        "title": "Link do Pubmed",
+                        "data": "linkPubmed", render: function (dataField) { return '<a target="_black" href="' + dataField + '">'+dataField+'</a>'; } 
+                    }, {
+                        "title": "Resultado",
+                        "data": "resultado"
+                }]
+            });
+            $('#bPesquisa').click(function(){
+                $('.loader').show();
+                $('#tableDataTable_wrapper').hide();
+                $('h2').hide();
+                let tags = $("#search-tag").val().split(",");
+                let virus = $("#virus").val();
+                let analise = $("#analise").val();
+                $('#bPesquisa').prop('disabled', true);
+                $.ajax({
+                    url: '/extract_information/',
+                    type: 'POST',
+                    data: { tags, virus, analise },
+                    datatype: 'json'
+                })
+                .done(function (data) { 
+                    myTable.clear();
+                        $.each(data.result, function(index, value) {
+                            myTable.row.add(value);
+                        });
+                        myTable.draw();
+                        $('#bPesquisa').prop('disabled', false);
+                        $('.loader').hide();
+                        $('#tableDataTable_wrapper').show();
+                        $('h2').show();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Ocorreu algum erro durante a execução")
+                    $('#bPesquisa').prop('disabled', false);
+                    $('.loader').hide();
+                    $('#tableDataTable_wrapper').show();
+                    $('h2').show();
+                });
+            });
+        });
+    </script>
+    </body>
+</html>

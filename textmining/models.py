@@ -1,16 +1,11 @@
 from django.db import models
 import os
 import textract
-import mysql.connector
 import nltk
-import matplotlib.pyplot as plt
-import numpy as np
 
-from mysql.connector import Error, errorcode
 from nltk import word_tokenize
 from nltk.probability import FreqDist
 from nltk.corpus import stopwords
-from collections import Counter
 
 nltk.download('stopwords')
 nltk.download('averaged_perceptron_tagger')
@@ -92,33 +87,6 @@ class TextMining(models.Model):
         wordsForGraphic = FreqDist(concact)                      
         wordsRepetition = wordsForGraphic.most_common()
         return wordsRepetition
-        
-    def preparateDataForGraphic(self, forGraphic, typeVirus):
-        list_word = []
-        qtd_cited_file = None
-        label = []
-        value = []
-        for words in forGraphic:
-            list_word.append(words[0])
-        qtd_cited_file = dict(Counter(list_word))
-        for elements in qtd_cited_file:
-            label.append(elements)
-            value.append(qtd_cited_file[elements])
-        self.generateGraphic(label, value, typeVirus)
-        
-    def generateGraphic(self, label, value, typeVirus):
-        fig, ax = plt.subplots(figsize=(10,6))
-        plt.bar(label, value, label = 'Total de Arquivos', color = 'b')
-        ax.grid(which='major', linestyle='--', linewidth='0.2', color='gray')
-        ax.xaxis.grid(False)
-        plt.title('Quantidade de arquivos com os termos citados')
-        plt.xlabel('Termos')
-        plt.ylabel('Quantidade de arquivos')
-        plt.legend(loc='best')
-        for i, v in enumerate(value):
-            plt.text(i, v + 0.5, str(v), ha='center')
-        fig.savefig('static/graphic/termosEncontradoEmArquivo'+typeVirus+'.png')
-        plt.close()
 
     def getWords(self, words, typeV, analise):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -147,7 +115,6 @@ class TextMining(models.Model):
                 linkPubmed = 'https://www.ncbi.nlm.nih.gov/pubmed/'+codPubmedFile
                 resultWords = {
                     'resultado': resultMining,
-                    # 'resultado': None,
                     'typeVirus': typeVirus,
                     'pathToFile': {
                         'uri': '../static/pdf/'+typeV+'/'+fileName,
@@ -158,11 +125,7 @@ class TextMining(models.Model):
                 }
                 if(analise == '1'):
                     forGraphic = resultMining + forGraphic
-                # forGraphic.append(qtdWords)
                 resultado.append(resultWords)
-        if(analise == '1'):
-            # init.preparateDataForGraphic(forGraphic, typeVirus)
-            pass
         retorno = {
             'status_code': 200,
             'result': resultado

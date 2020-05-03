@@ -35,16 +35,19 @@ Depois que rodar o sistema o link para acessar a página de pesquisa é:
 Por padrão o DJANGO trabalha na porta 8000.
 
 Acessando o link, será exibita a seguint página:
-![Tela inicial do arbominer](https://github.com/WellCorreia/arbominer/tree/master/static/image/arbominer_inicial.png?raw=true)
+
+![Tela inicial do arbominer](https://github.com/WellCorreia/arbominer/blob/master/static/image/arbominer_inicial.png?raw=true)
 
 Um dos parâmetros de pesquisa da ferramente é o vírus que permitirá a pesquisa em um dois arbovírus, sendo eles a Dengue, Zika e Chikungunya. Porém o vírus da dengue pode ser pesquisado através de seus sorotipos 1, 2, 3 e 4.
 
 O segundo parâmetro é o tipo de análise que deverá ser feita nos artigos que estão armazenados no repositório, existem apenas dois tipos de análise sendo elas a análise estatística e análise semântica.
-A análise estatística permite retornar quantos termos pesquisados existem no artigo, como pode ver na imagem a seguir. 
-![Tela de resultado da análise estatística](https://github.com/WellCorreia/arbominer/tree/master/static/image/arbominer_analise_estatistica.png?raw=true)
+A análise estatística permite retornar quantos termos pesquisados existem no artigo, como pode ver na imagem a seguir:
 
-Já a análise semântica iirá retornar frases que tenham alguma algum dos termos pesquisados em seu escopo, como pode-se ver na imagem a seguir
-![Tela de resultado da análise semântica](https://github.com/WellCorreia/arbominer/tree/master/static/image/arbominer_analise_semantica.png?raw=true)
+![Tela de resultado da análise estatística](https://github.com/WellCorreia/arbominer/blob/master/static/image/arbominer_analise_estatistica.png?raw=true)
+
+Já a análise semântica iirá retornar frases que tenham alguma algum dos termos pesquisados em seu escopo, como pode-se ver na imagem a seguir:
+
+![Tela de resultado da análise semântica](https://github.com/WellCorreia/arbominer/blob/master/static/image/arbominer_analise_semantica.png?raw=true)
 
 O terceiro parâmetro da pesquisa é um campo para adicionar tags que irá aceitar apenas palavras, caso não seja informado nenhuma palavra para a pesquisa a ferramenta irá fazer a pesquisa com algumas palavras previamente definida em seu código.
 
